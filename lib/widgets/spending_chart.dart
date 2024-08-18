@@ -1,5 +1,5 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../models/budget_entry.dart';
 
 class SpendingChart extends StatelessWidget {
@@ -11,8 +11,11 @@ class SpendingChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final categories = <String, double>{};
     for (var entry in entries) {
-      categories[entry.category] =
-          (categories[entry.category] ?? 0) + entry.amount;
+      categories[entry.category] = (categories[entry.category] ?? 0) + entry.amount;
+    }
+
+    if (categories.isEmpty) {
+      return Center(child: Text('No data available'));
     }
 
     final barChartData = categories.entries.map((e) {
@@ -23,47 +26,64 @@ class SpendingChart extends StatelessWidget {
             toY: e.value,
             color: Colors.blue,
             width: 15,
+            borderRadius: BorderRadius.circular(4),
           ),
         ],
       );
     }).toList();
 
-    //   return BarChart(
-    //     BarChartData(
-    //       barGroups: barChartData,
-    //       titlesData: FlTitlesData(
-    //         bottomTitles: SideTitles(
-    //           showTitles: true,
-    //           reservedSize: 40,
-    //           getTitlesWidget: (value, meta) {
-    //             final index = value.toInt();
-    //             final title = categories.keys.elementAt(index);
-    //             return SideTitleWidget(
-    //               axisSide: meta.axisSide,
-    //               child: Text(title),
-    //             );
-    //           },
-    //         ),
-    //         leftTitles: SideTitles(
-    //           showTitles: true,
-    //           reservedSize: 40,
-    //           getTitlesWidget: (value, meta) {
-    //             return Text('${value.toString()}');
-    //           },
-    //         ),
-    //         topTitles: SideTitles(showTitles: false),
-    //         rightTitles: SideTitles(showTitles: false),
-    //       ),
-    //       borderData: FlBorderData(
-    //         show: true,
-    //         border: Border.all(
-    //           color: const Color(0xff37434d),
-    //           width: 1,
-    //         ),
-    //       ),
-    //       gridData: FlGridData(show: false),
-    //     ),
-    //   );
-    // }
+    return SizedBox(
+      height: 400,
+      child: BarChart(
+        BarChartData(
+          barGroups: barChartData,
+          titlesData: FlTitlesData(
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 40,
+                getTitlesWidget: (value, meta) {
+                  final index = value.toInt();
+                  final title = categories.keys.elementAt(index);
+                  return SideTitleWidget(
+                    axisSide: meta.axisSide,
+                    child: Text(
+                      title,
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
+              ),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 40,
+                getTitlesWidget: (value, meta) {
+                  return SideTitleWidget(
+                    axisSide: meta.axisSide,
+                    child: Text(
+                      '${value.toString()}',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
+              ),
+            ),
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          ),
+          borderData: FlBorderData(
+            show: true,
+            border: Border.all(
+              color: const Color(0xff37434d),
+              width: 1,
+            ),
+          ),
+          gridData: FlGridData(show: false),
+          alignment: BarChartAlignment.spaceAround,
+        ),
+      ),
+    );
   }
 }

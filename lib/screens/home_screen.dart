@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/budget_entry.dart';
+import 'chart_screen.dart'; // Adjust the import based on your file structure
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _entries.add(newEntry);
     });
 
+    _saveEntries();
     _categoryController.clear();
     _amountController.clear();
   }
@@ -94,19 +96,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: _saveEntries,
-                  child: Text('Save Entries'),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: _loadEntries,
-                  child: Text('Load Entries'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChartScreen(entries: _entries),
+                      ),
+                    );
+                  },
+                  child: Text('View Chart'),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: _entries.isEmpty
+                ? Center(child: Text('No entries available.'))
+                : ListView.builder(
               itemCount: _entries.length,
               itemBuilder: (ctx, index) {
                 final entry = _entries[index];
