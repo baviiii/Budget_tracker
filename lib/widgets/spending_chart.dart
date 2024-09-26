@@ -5,7 +5,7 @@ import '../models/budget_entry.dart';
 class SpendingChart extends StatelessWidget {
   final List<BudgetEntry> entries;
 
-  SpendingChart({required this.entries});
+  const SpendingChart({super.key, required this.entries});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class SpendingChart extends StatelessWidget {
     }
 
     if (categories.isEmpty) {
-      return Center(child: Text('No data available'));
+      return const Center(child: Text('No data available'));
     }
 
     final barChartData = categories.entries.map((e) {
@@ -49,7 +49,7 @@ class SpendingChart extends StatelessWidget {
                     axisSide: meta.axisSide,
                     child: Text(
                       title,
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   );
                 },
@@ -63,15 +63,15 @@ class SpendingChart extends StatelessWidget {
                   return SideTitleWidget(
                     axisSide: meta.axisSide,
                     child: Text(
-                      '${value.toString()}',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      value.toString(),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   );
                 },
               ),
             ),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
           borderData: FlBorderData(
             show: true,
@@ -80,7 +80,7 @@ class SpendingChart extends StatelessWidget {
               width: 1,
             ),
           ),
-          gridData: FlGridData(show: false),
+          gridData: const FlGridData(show: false),
           alignment: BarChartAlignment.spaceAround,
         ),
       ),
